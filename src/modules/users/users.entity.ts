@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
+import { Post } from '@/modules/posts/posts.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -13,4 +14,7 @@ export class User {
 
   @Column({ select: false })
   passwordHash: string;
+
+  @OneToMany(() => Post, (post) => post.postBy)
+  posts: Post[];
 }
