@@ -16,13 +16,13 @@ export class AuthService {
     const user = await this.usersService.findByUsername(username);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Your username is not exist !');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Password is wrong !');
     }
 
     const payload = {
