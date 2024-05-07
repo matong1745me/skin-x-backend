@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   HttpException,
@@ -16,6 +15,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { ResponseCreatePostDto } from './dto/response-create-post';
 import { ErrorResponseDto } from '@/dto/error-response.dto';
 import { PostsService } from './posts.service';
+import { UserPayloadDto } from '@/dto/user-payload.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -32,7 +32,7 @@ export class PostsController {
   @Post()
   @UseGuards(JwtAuthGuard)
   async createPost(
-    @Request() req: { body: CreatePostDto; user: any },
+    @Request() req: { body: CreatePostDto; user: UserPayloadDto },
   ): Promise<ResponseCreatePostDto> {
     try {
       const { user, body } = req;
