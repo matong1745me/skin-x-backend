@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Like, FindManyOptions, ArrayContains } from 'typeorm';
 import { PostsRepository } from './posts.repository';
 import { Post } from './posts.entity';
@@ -44,5 +44,15 @@ export class PostsService {
     const newPost = this.postsRepository.createPost(title, content, user, tags);
 
     return newPost;
+  }
+
+  async getOneById(id: number): Promise<Post> {
+    const post = await this.postsRepository.getOneById(id);
+
+    if (!post) {
+      throw new NotFoundException('Post is not found !');
+    }
+
+    return post;
   }
 }

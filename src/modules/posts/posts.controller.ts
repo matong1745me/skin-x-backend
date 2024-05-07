@@ -7,6 +7,7 @@ import {
   Request,
   UseGuards,
   Query,
+  Param,
 } from '@nestjs/common';
 // import { CreatePostDto } from './dto/create-post.dto';
 
@@ -17,6 +18,7 @@ import { ErrorResponseDto } from '@/dto/error-response.dto';
 import { PostsService } from './posts.service';
 import { UserPayloadDto } from '@/dto/user-payload.dto';
 import { ResponseGetAllPostDto } from './dto/response-get-all-post.dto';
+import { ResponseGetPostDto } from './dto/response-get-post.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -75,9 +77,26 @@ export class PostsController {
       return responsePost;
     } catch (error) {
       const errorResponse = new ErrorResponseDto(
-        HttpStatus.BAD_REQUEST,
+        error.response.statusCode || HttpStatus.BAD_REQUEST,
         error.message,
-        'BadRequestError',
+        error.response.error || 'BadRequestError',
+      );
+      throw new HttpException(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  async getPostById(@Param('id') id: string): Promise<ResponseGetPostDto> {
+    try {
+      const post = await this.postsService.getOneById(Number(id));
+
+      return post;
+    } catch (error) {
+      const errorResponse = new ErrorResponseDto(
+        error.response.statusCode || HttpStatus.BAD_REQUEST,
+        error.message,
+        error.response.error || 'BadRequestError',
       );
       throw new HttpException(errorResponse, HttpStatus.BAD_REQUEST);
     }

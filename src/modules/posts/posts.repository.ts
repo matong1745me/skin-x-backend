@@ -21,4 +21,9 @@ export class PostsRepository extends Repository<Post> {
 
     return await this.save(post);
   }
+  async getOneById(id: number): Promise<Post> {
+    const post = await this.findOne({ where: { id } });
+
+    return post;
+  }
 }

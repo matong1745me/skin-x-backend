@@ -36,9 +36,9 @@ export class UsersController {
       return responseUser;
     } catch (error) {
       const errorResponse = new ErrorResponseDto(
-        HttpStatus.BAD_REQUEST,
+        error.response.statusCode || HttpStatus.BAD_REQUEST,
         error.message,
-        'BadRequestError',
+        error.response.error || 'BadRequestError',
       );
       throw new HttpException(errorResponse, HttpStatus.BAD_REQUEST);
     }
