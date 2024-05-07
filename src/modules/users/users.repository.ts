@@ -23,7 +23,7 @@ export class UsersRepository extends Repository<User> {
   async findByUsername(username: string): Promise<User | undefined> {
     return await this.createQueryBuilder('user')
       .where('user.username = :username', { username })
-      .addSelect('user.passwordHash')
+      .addSelect('user.password')
       .getOne();
   }
 }

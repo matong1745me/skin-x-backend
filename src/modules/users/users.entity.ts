@@ -2,12 +2,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
-import { Post } from '@/modules/posts/posts.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -20,18 +19,18 @@ export class User {
   username: string;
 
   @Column({ select: false })
-  passwordHash: string;
-
-  @OneToMany(() => Post, (post) => post.postBy)
-  posts: Post[];
+  password: string;
 
   getPassword(): string {
-    return this.passwordHash;
+    return this.password;
   }
 
   @BeforeInsert()
-  async password() {
-    const passwordHash = await bcrypt.hash(this.password, 10);
-    this.passwordHash = passwordHash;
+  @BeforeUpdate()
+  async hashPassword() {
+    if (this.password) {
+      const saltRounds = 10;
+      this.password = await bcrypt.hash(this.password, saltRounds);
+    }
   }
 }

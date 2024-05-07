@@ -18,8 +18,7 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('Your username is not exist !');
     }
-
-    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Password is wrong !');
@@ -27,6 +26,7 @@ export class AuthService {
 
     const payload = {
       username: user.username,
+      displayName: user.displayName,
       sub: user.id,
     };
 

@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PostsRepository } from './posts.repository';
 import { Post } from './posts.entity';
-import { User } from '@/modules/users/users.entity';
-import { Tag } from '@/modules/tags/tags.entity';
 
 @Injectable()
 export class PostsService {
@@ -11,8 +9,8 @@ export class PostsService {
   async createPost(
     title: string,
     content: string,
-    user: User,
-    tags: Tag[],
+    user: string,
+    tags: string[],
   ): Promise<Post> {
     const newPost = this.postsRepository.createPost(title, content, user, tags);
 

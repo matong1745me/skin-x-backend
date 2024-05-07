@@ -3,13 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToOne,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
-
-import { User } from '@/modules/users/users.entity';
-import { Tag } from '@/modules/tags/tags.entity';
 
 @Entity()
 export class Post {
@@ -25,10 +19,9 @@ export class Post {
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   postAt: Date;
 
-  @ManyToOne(() => User, (user) => user.posts)
-  postBy: User;
+  @Column()
+  postBy: string;
 
-  @ManyToMany(() => Tag)
-  @JoinTable()
-  tags: Tag[];
+  @Column('text', { array: true })
+  tags: string[];
 }
