@@ -9,6 +9,7 @@ export class PostsService {
 
   async findAllWithFilterAndPagination(
     search: string,
+    tags: string,
     page: number = 1,
     limit: number = 10,
     sortBy: 'title' | 'postedAt' = 'title',
@@ -22,10 +23,10 @@ export class PostsService {
       },
     };
 
-    if (search) {
+    if (search || tags) {
       options.where = [
         { title: Like(`%${search}%`) },
-        { tags: ArrayContains([search]) },
+        { tags: ArrayContains(tags.split(',')) },
         { postedBy: Like(`%${search}%`) },
       ];
     }

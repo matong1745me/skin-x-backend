@@ -11,7 +11,6 @@ import {
 // import { CreatePostDto } from './dto/create-post.dto';
 
 import { JwtAuthGuard } from '@/guards/auth.guard';
-import { Post as PostEntity } from './posts.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { ResponseCreatePostDto } from './dto/response-create-post.dto';
 import { ErrorResponseDto } from '@/dto/error-response.dto';
@@ -27,6 +26,7 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   async getPost(
     @Query('search') search: string,
+    @Query('tags') tags: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('sortBy') sortBy: 'title' | 'postedAt' = 'title',
@@ -35,6 +35,7 @@ export class PostsController {
     const { posts, total } =
       await this.postsService.findAllWithFilterAndPagination(
         search,
+        tags,
         page,
         limit,
         sortBy,
