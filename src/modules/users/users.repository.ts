@@ -13,10 +13,10 @@ export class UsersRepository extends Repository<User> {
   }
   async createUser(
     username: string,
-    passwordHash: string,
+    password: string,
     displayName: string,
   ): Promise<User> {
-    const user = this.create({ username, passwordHash, displayName });
+    const user = this.create({ username, password, displayName });
     return await this.save(user);
   }
 

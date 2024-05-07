@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  BeforeInsert,
+} from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 
 import { Post } from '@/modules/posts/posts.entity';
 @Entity()
@@ -17,4 +24,14 @@ export class User {
 
   @OneToMany(() => Post, (post) => post.postBy)
   posts: Post[];
+
+  getPassword(): string {
+    return this.passwordHash;
+  }
+
+  @BeforeInsert()
+  async password() {
+    const passwordHash = await bcrypt.hash(this.password, 10);
+    this.passwordHash = passwordHash;
+  }
 }

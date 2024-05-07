@@ -3,6 +3,7 @@ import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 
 import { JwtAuthGuard } from '@/guards/auth.guard';
 import { Post as PostEntity } from './posts.entity';
+
 @Controller('posts')
 export class PostsController {
   @Get()
