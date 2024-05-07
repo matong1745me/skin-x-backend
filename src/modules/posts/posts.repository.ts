@@ -14,10 +14,10 @@ export class PostsRepository extends Repository<Post> {
   async createPost(
     title: string,
     content: string,
-    postBy: string,
+    postedBy: string,
     tags: string[],
   ): Promise<Post> {
-    const post = this.create({ title, content, postBy, tags });
+    const post = this.create({ title, content, postedBy, tags });
 
     return await this.save(post);
   }

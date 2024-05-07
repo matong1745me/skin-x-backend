@@ -6,16 +6,18 @@ import {
   Post,
   Request,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 // import { CreatePostDto } from './dto/create-post.dto';
 
 import { JwtAuthGuard } from '@/guards/auth.guard';
 import { Post as PostEntity } from './posts.entity';
 import { CreatePostDto } from './dto/create-post.dto';
-import { ResponseCreatePostDto } from './dto/response-create-post';
+import { ResponseCreatePostDto } from './dto/response-create-post.dto';
 import { ErrorResponseDto } from '@/dto/error-response.dto';
 import { PostsService } from './posts.service';
 import { UserPayloadDto } from '@/dto/user-payload.dto';
+import { ResponseGetAllPostDto } from './dto/response-get-all-post.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -23,10 +25,28 @@ export class PostsController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getPost(@Request() req): Promise<PostEntity> {
-    const payload = req.user;
+  async getPost(
+    @Query('search') search: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('sortBy') sortBy: 'title' | 'postedAt' = 'title',
+    @Query('order') order: 'ASC' | 'DESC' = 'ASC',
+  ): Promise<ResponseGetAllPostDto> {
+    const { posts, total } =
+      await this.postsService.findAllWithFilterAndPagination(
+        search,
+        page,
+        limit,
+        sortBy,
+        order,
+      );
 
-    return payload;
+    return {
+      page: Number(page),
+      total,
+      order,
+      posts,
+    };
   }
 
   @Post()
@@ -47,8 +67,8 @@ export class PostsController {
         title: newPost.title,
         content: newPost.content,
         tags: newPost.tags,
-        postBy: newPost.postBy,
-        postAt: newPost.postAt,
+        postedBy: newPost.postedBy,
+        postedAt: newPost.postedAt,
       };
 
       return responsePost;
