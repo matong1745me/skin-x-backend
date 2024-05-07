@@ -7,9 +7,15 @@ import { AppService } from '@/app.service';
 
 import { UsersModule } from '@/modules/users/users.module';
 import { AuthModule } from '@/modules/auth/auth.module';
+import { PostsModule } from './modules/posts/post.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(dbConfig), UsersModule, AuthModule],
+  imports: [
+    TypeOrmModule.forRoot(dbConfig),
+    UsersModule,
+    AuthModule,
+    PostsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
